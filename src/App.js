@@ -1,14 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider, Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const client = new ApolloClient({
   uri: 'https://api.thegraph.com/subgraphs/name/ssilvajb/wrapped-btc'
 });
 
-const wbtcQuery = gql`
+const WBTC_QUERY = gql`
 {
 minters {
     id
@@ -19,9 +19,10 @@ minters {
 }
 `;
 
-client.query({
-  query: wbtcQuery
-}).then(res => console.log(res));
+// Running a query outside react
+//client.query({
+//  query: wbtcQuery
+//}).then(res => console.log(res));
 
 function App() {
   return (
@@ -41,6 +42,13 @@ function App() {
           Learn React
         </a>
       </header>
+      <Query query = {WBTC_QUERY}>
+        {({loading, data}) => {
+          if (loading) return "Loading...";
+          const { minters } = data;
+          return minters.map(minter => <h1>{minter.id}</h1>);
+        }}
+      </Query>
     </div>
     </ApolloProvider>
   );
