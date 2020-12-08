@@ -9,12 +9,14 @@ const client = new ApolloClient({
 });
 
 const wbtcQuery = gql`
+{
 minters {
     id
     address
     totalMinted
     totalBurned
   }
+}
 `;
 
 client.query({
